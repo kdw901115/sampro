@@ -913,6 +913,14 @@ function renderReport(r, a, debtRatio) {
   const expertPct = r.expertPct || 75;
   const rc = document.getElementById('reportCard');
   rc.innerHTML = `
+    <div class="consult-section" style="margin-bottom:20px;">
+      <div class="consult-box">
+        <div class="consult-eyebrow">✅ 접수 완료</div>
+        <div class="consult-heading">${bi.name || ''}대표님,<br>곧 연락드리겠습니다</div>
+        <div class="consult-desc">입력해 주신 내용을 바탕으로 담당 전문 상담가가 직접 연락드려 맞춤 자금을 안내해 드립니다.</div>
+        <div class="consult-note" style="margin-top:12px;">평일 10:00 – 18:00 · 보통 1영업일 내 연락</div>
+      </div>
+    </div>
     <div class="grade-hero">
       <div class="grade-row">
         <div class="grade-circle ${gradeColor[r.grade] || 'grade-B'}">
@@ -992,19 +1000,7 @@ function renderReport(r, a, debtRatio) {
       </div>
     </div>` : ''}
 
-    <div class="consult-section">
-      <div class="consult-box">
-        <div class="consult-eyebrow">✅ 접수 완료</div>
-        <div class="consult-heading">${bi.name || ''}대표님,<br>곧 연락드리겠습니다</div>
-        <div class="consult-desc">입력해 주신 내용을 바탕으로 담당 전문 상담가가 직접 연락드려 맞춤 자금을 안내해 드립니다.</div>
-        <div class="consult-points">
-          <div class="consult-point"><div class="cp-dot"></div>업체명 : ${bi.company || '—'}</div>
-          <div class="consult-point"><div class="cp-dot"></div>대표자명 : ${bi.name || '—'}</div>
-          <div class="consult-point"><div class="cp-dot"></div>연락처 : ${bi.phone || '—'}</div>
-        </div>
-        <div class="consult-note" style="margin-top:16px;">평일 10:00 – 18:00 · 보통 1영업일 내 연락</div>
-      </div>
-    </div>
+
 
     <div class="report-footer">
       <button class="footer-btn" onclick="restartApp()">↩ 다시 진단하기</button>

@@ -649,6 +649,13 @@ const QUESTIONS = [
       { icon: '💵', label: '최대한도', sub: '가능한 최대 금액 신청', value: 50000 },
     ]
   },
+  {
+    id: 'memo',
+    step: '남기실 말씀',
+    text: '남기고 싶은 말씀이나 문의사항을 적어주세요',
+    hint: '선택사항입니다. 없으시면 건너뛰기를 눌러주세요',
+    type: 'memo',
+  },
 ];
 
 // ── 상태 ──────────────────────────────
@@ -686,6 +693,13 @@ function render() {
       </button>`;
     });
     inner += `</div>`;
+  } else if (q.type === 'memo') {
+    const memoVal = answers.memo || '';
+    inner += `<div style="display:flex;flex-direction:column;gap:10px;">
+      <textarea id="memoInput" rows="5" placeholder="예) 최근 매출이 줄었는데 운전자금이 급합니다. 연락은 오후에 부탁드립니다."
+        style="width:100%;padding:14px;border:1.5px solid var(--border);border-radius:12px;font-size:15px;font-family:inherit;resize:none;background:var(--bg2);color:var(--text1);line-height:1.6;box-sizing:border-box;"
+        >${memoVal}</textarea>
+    </div>`;
   } else if (q.type === 'bizinfo') {
     const bi = answers.bizInfo || {};
     inner += `<div style="display:flex;flex-direction:column;gap:14px;">
@@ -723,6 +737,11 @@ function render() {
   if (q.type === 'text' || q.type === 'bizinfo') {
     nav.innerHTML += `<button class="btn-next" onclick="nextFromBizInfo()">다음 →</button>`;
   }
+  if (q.type === 'memo') {
+    nav.style.cssText += 'display:flex;align-items:center;gap:10px;flex-wrap:wrap;';
+    nav.innerHTML += `<button class="btn-next" style="flex:1;" onclick="nextFromMemo()">진단 시작 →</button>`;
+    nav.innerHTML += `<button onclick="answers.memo=''; startAnalysis();" style="padding:12px 20px;border:1.5px solid var(--border);border-radius:12px;background:transparent;color:var(--text2);font-size:14px;cursor:pointer;white-space:nowrap;">건너뛰기</button>`;
+  }
   area.appendChild(nav);
 
   // restore selection
@@ -740,6 +759,12 @@ function render() {
   if (q.type === 'bizinfo') {
     setTimeout(() => document.getElementById('biCompany')?.focus(), 100);
   }
+}
+
+function nextFromMemo() {
+  const memo = document.getElementById('memoInput')?.value.trim() || '';
+  answers.memo = memo;
+  startAnalysis();
 }
 
 function nextFromBizInfo() {
@@ -1007,6 +1032,7 @@ function saveDiagLog(r, a) {
     creditScore: a.creditScore === -1 ? '미확인' : String(a.creditScore || ''),
     taxOk:       a.taxOk      || '',
     reqAmount:   a.reqAmount  ? a.reqAmount.toLocaleString() + '만원' : '',
+    memo:        a.memo       || '',
     grade:       r.grade      || ''
   });
   // GET 방식으로 조용히 전송 (실패해도 사용자에게 영향 없음)
